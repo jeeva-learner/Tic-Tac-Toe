@@ -1,0 +1,22 @@
+.outerbody{
+    display: flex;
+    flex-direction: column;
+    min-width: 100vh;
+    height: auto;
+    padding: 30vh;
+    align-items: center;
+}
+.board{
+    height: 40vh;
+    width: 40vh;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    box-sizing: border-box;
+}
+.cell{
+    border: 1px solid black;
+    flex: 1;
+    flex-basis: calc(30%);
+}
