@@ -12,7 +12,21 @@ function playerfactory(name,symbol,default_score=0){
     const player2 = playerfactory("user2",'O');
     let currentplayer = player1;
     let gamestatus = true;
+    function clearui(){
+        const container = document.querySelectorAll('.cell')
+        container.forEach((cell)=>{
+            cell.classList.remove('winnermark')
+        })
+    }
+    function winnerui(a,b,c){
+        const contents = document.querySelectorAll('.cell')
+        const win = [a,b,c]
+        win.forEach((cell)=>{
+            contents[cell].classList.add('winnermark')
+        })
+    }
     let render = () =>{
+        clearui()
         const contents = document.querySelectorAll('.cell')
         contents.forEach((cell,i)=>{
             cell.textContent = board[i];
@@ -55,21 +69,42 @@ function playerfactory(name,symbol,default_score=0){
                 else{
                     player2.score +=1;
                 }
+                winnerui(a,b,c)
                 winnerupdate(winner);
                 return winner;
             }
         }
-        return winner;
+        let draw = true
+        for(let i = 0; i<board.length;i++){
+            if(board[i] === ''){
+                draw = false;
+                break;
+            }
+        }
+        if(draw){
+            gamestatus = false;
+            winner = "draw";
+            winnerupdate(winner)
+            return winner;
+        }
     }
     function winnerupdate(winner){
         
         if (winner === 'X'){
             const winui = document.querySelector('.scoreX')
             winui.innerHTML = player1.score;
+            const banner = document.querySelector('.announcement');
+            banner.textContent = 'Player X won this round'
         }
-        else{
+        else if(winner === 'O'){
             const winui = document.querySelector('.scoreO')
             winui.innerHTML = player2.score;
+            const banner = document.querySelector('.announcement');
+            banner.textContent = 'Player O won this round'
+        }
+        else if(winner === 'draw'){
+            const banner = document.querySelector('.announcement')
+            banner.textContent = "It's a draw 🙂";
         }
     }
     Initialize()
@@ -80,6 +115,8 @@ function playerfactory(name,symbol,default_score=0){
             board[i] = '';
         }
         gamestatus = true;
+        const banner = document.querySelector('.announcement');
+        banner.innerHTML = " ";
         render()
     })
     restart.addEventListener('click',()=>{
@@ -92,6 +129,8 @@ function playerfactory(name,symbol,default_score=0){
         currentplayer = player1;
         winnerupdate('X');
         winnerupdate('O');
+        const banner = document.querySelector('.announcement');
+        banner.innerHTML = " ";
         render()
        
     })
